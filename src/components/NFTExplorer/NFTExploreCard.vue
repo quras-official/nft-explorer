@@ -1,19 +1,19 @@
 <template>
 <div id="explorecard">
-		<div class="row mt-10">
-			<div class="col-md-6 col-10 mx-auto text-center" style="font-size:2.5rem;color:#4780A0;font-weight:bold;text-transform: uppercase;">
+		<div class="row mt-5-1">
+			<div class="col-md-6 col-10 mx-auto text-center banner-tx mt-banner">
 				Welcome to Quras’s Non fungible token (NFT) explorer and minter. 
 			</div>
 		</div>
 
-		<div class="row mt-5">
-			<div class="col-10 col-md-6 mx-auto" style="font-size:1.5rem;">
+		<div class="row mt-5-1">
+			<div class="col-10 col-md-6 mx-auto description-tx">
 				This POC is to help developers get started with NFT’s in the NEO Smart Economy.
 				<a href="#">Learn More</a>
 			</div>
 		</div>
 
-		<div class="row mt-5">
+		<div class="row mt-5-1">
 			<div class="col-10 col-md-6 mx-auto" style="width:100%">
 				<div class="input-group mb-1">
 					<input class="form-control" v-model="search_value" v-bind:class= "{'is-valid': valid_input == true, 'is-invalid': valid_input == false}" placeholder="Contract or User Address" aria-label="NEO address" aria-describedby="basic-addon2">
@@ -54,7 +54,7 @@
 			</div>
 		</section>
 
-		<section class="row mt-5 mb-10 col-10 col-md-6 mx-auto" v-if="totalSupply == undefined || totalSupply == 0"> 
+		<section class="row mt-5-1 mb-10 col-10 col-md-6 mx-auto" v-if="totalSupply == undefined || totalSupply == 0"> 
 				<div class="landing-info-title-card mb-1 mx-auto">Don't know any NFT addresses or contracts? Check these out!</div>
 				<div class="landing-info-card mb-1 mx-auto">Quras Foundry <a href="#" v-on:click="navigateToFoundry">7fe1d36ed60846975e70ec8b6fc0bef08b033107</a></div>
 				<div class="landing-info-card mb-1 mx-auto">HashPuppies, the OG NFT <a href="#" v-on:click="navigateToHashPuppy">e7b2046b2412c4c7f1531ce144a73d47c3b272fe</a></div>
@@ -71,7 +71,7 @@
 
 	
 	const QurasJs = require('quras-js');
-	const testRpcServer = new QurasJs.rpc.RPCClient(QurasJs.CONST.QURAS_NETWORK.TEST);
+	const testRpcServer = new QurasJs.rpc.RPCClient(QurasJs.CONST.QURAS_NETWORK.MAIN);
 
 	export default {
 		components: {
@@ -239,7 +239,7 @@
 										self.tokens.push ({
 											"token_id": values[2],
 											"uri": uri,
-											"owner": Neon.wallet.getAddressFromScriptHash(Neon.u.reverseHex(values[1]["stack"][0]["value"])),
+											"owner": QurasJs.wallet.getAddressFromScriptHash(QurasJs.u.reverseHex(values[1]["stack"][0]["value"])),
 											"contract": contract
 										})
 										self.totalSupply +=1
@@ -270,42 +270,46 @@
 				var endIndex = Math.min(self.current_page * self.items_per_page + self.items_per_page + 1, self.totalSupply + 1)
 				var AddingItemInd = startIndex
 				for (var i=startIndex; i<endIndex; i++) {
-					var param = [
-						{
-							"type": "Integer",
-							"value": i
-						}
-					]
-					
-					testRpcServer.invokeFunction(self.contract_hash,"tokenMetadata",param)
-					.then((uriValue) => {
-						var param_owner = [
+					setTimeout(function(tokenId){
+						console.log(tokenId)
+						var param = [
 							{
 								"type": "Integer",
-								"value": uriValue["stack"][0]["value"]
+								"value": tokenId
 							}
 						]
-						testRpcServer.invokeFunction(self.contract_hash,"ownerOf",param_owner)
-						.then((ownerValue) => {
-							self.$emit('isNotWaitingForDapi')
-							var uri = self.convertHexToString(uriValue["stack"][1]["value"])
-							var owner = self.convertHexToString(ownerValue["stack"][1]["value"])
-							self.tokens.push ({
-								"token_id": ownerValue["stack"][0]["value"],
-								"uri": uri,
-								"owner": QurasJs.wallet.getAddressFromScriptHash(ownerValue["stack"][1]["value"]),
-								"contract": self.contract_hash
+						testRpcServer.invokeFunction(self.contract_hash,"tokenMetadata",param)
+						.then((uriValue) => {
+							var param_owner = [
+								{
+									"type": "Integer",
+									"value": tokenId
+								}
+							]
+							console.log(tokenId)
+							testRpcServer.invokeFunction(self.contract_hash,"ownerOf",param_owner)
+							.then((ownerValue) => {
+								self.$emit('isNotWaitingForDapi')
+								var uri = self.convertHexToString(uriValue["stack"][0]["value"])
+								var owner = self.convertHexToString(ownerValue["stack"][0]["value"])
+								self.tokens.push ({
+									"token_id": tokenId,
+									"uri": uri,
+									"owner": QurasJs.wallet.getAddressFromScriptHash(QurasJs.u.reverseHex(ownerValue["stack"][0]["value"])),
+									"contract": self.contract_hash
+								})
+							})
+							.catch((error) => {
+								self.$emit('isNotWaitingForDapi')
+								self.unknownError = true
 							})
 						})
 						.catch((error) => {
 							self.$emit('isNotWaitingForDapi')
 							self.unknownError = true
 						})
-					})
-					.catch((error) => {
-						self.$emit('isNotWaitingForDapi')
-						self.unknownError = true
-					})
+
+					}, 1000, i);
 				}
 			},
 			loadAllTokensForContract() {
@@ -372,29 +376,73 @@
 	background-image: url('<%= BASE_URL %>../../foundary-background.png');
 	background-size: 100%;
  }
- .landing-info-card {
-	color: #4E4E4E;
-	font-size: 1.3rem;
-	text-align: center;
-	padding-bottom: .5rem;
+ @media (max-width:767px)
+ {
+	.landing-info {
+		color: #4E4E4E;
+		font-size: 13px;
+		padding-bottom: .5rem;
+		text-align: center;
+	}
+
+	.landing-info-title {
+		color: #4780A0;
+		font-size: 13px;
+		font-weight: bold;
+		padding-bottom: 1.5rem;
+		text-align: center;
+	}
+
+	.success-message {
+		color: #7ED321;
+		font-size: 13px;
+		font-weight: bold;
+		text-align: center;
+	}
+
+	.paging-button {
+		min-width: 100px;
+	}
+ }
+
+ @media (min-width:768px)
+ {
+	.landing-info {
+		color: #4E4E4E;
+		font-size: 18px;
+		padding-bottom: .5rem;
+	}
+
+	.landing-info-title {
+		color: #4780A0;
+		font-size: 18px;
+		font-weight: bold;
+		padding-bottom: 1.5rem;
+	}
+
+	.success-message {
+		color: #7ED321;
+		font-size: 18px;
+		font-weight: bold;
+	}
+
+	.paging-button {
+		min-width: 100px;
+	}
+ }
+
+.description-tx
+{
+	font-size:18px;
 }
 
-.landing-info-title-card {
-	color: #4780A0;
-	font-size: 1.3rem;
-	font-weight: bold;
-	text-align: center;
-	padding-bottom: 1.5rem;
+@media (min-width:768px)
+{
+	.description-tx
+	{
+		font-size:1.5rem;
+	}
 }
 
-.success-message {
-	color: #7ED321;
-	font-size: 18px;
-	font-weight: bold;
-}
-
-.paging-button {
-	min-width: 100px;
-}
 
 </style>

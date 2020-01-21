@@ -71,11 +71,11 @@
                     <div class="col-lg-3 col-6 col-sm-4 ml-lg-auto mb-5 mb-lg-0">
                         <h6 class="heading mb-3">Community</h6>
                         <ul class="list-unstyled">
-                            <li><a href="https://o3.network">Quras Telegram Group</a>
+                            <li><a href="#">Quras Telegram Group</a>
                             </li>
-                            <li><a href="https://o3.network/team/">Face</a>
+                            <li><a href="#">Face</a>
                             </li>
-                            <li><a href="https://community.o3.network/">Twitter</a>
+                            <li><a href="#">Twitter</a>
                             </li>
                         </ul>
                         
@@ -84,13 +84,13 @@
                     <div class="col-lg-3 col-sm-4 mb-5 mb-lg-0">
                         <h6 class="heading mb-3">Quras</h6>
                         <ul class="list-unstyled">
-                            <li><a href="https://o3.network">IOS</a>
+                            <li><a href="#">IOS</a>
                             </li>
-                            <li><a href="https://o3.network/team/">Android</a>
+                            <li><a href="#">Android</a>
                             </li>
-                            <li><a href="https://community.o3.network/">macOS</a>
+                            <li><a href="#">macOS</a>
                             </li>
-                            <li><a href="mailto:support@o3.network">Windows</a>
+                            <li><a href="#">Windows</a>
                             </li>
                         </ul>
                     </div>
@@ -98,11 +98,11 @@
                     <div class="col-lg-2 col-sm-4 mb-5 mb-lg-0">
                         <h6 class="heading mb-3">Company</h6>
                         <ul class="list-unstyled">
-                            <li><a href="https://itunes.apple.com/app/id1336781023">Home</a>
+                            <li><a href="#">Home</a>
                             </li>
-                            <li><a href="https://play.google.com/store/apps/details?id=network.o3.o3wallet">Team</a>
+                            <li><a href="#">Team</a>
                             </li>
-                            <li><a href="https://itunes.apple.com/us/app/o3/id1421086700">Support</a>
+                            <li><a href="#">Support</a>
                             </li>
                         </ul>
                     </div>
@@ -112,25 +112,25 @@
             <div class="row align-items-center justify-content-md-between py-4 mt-4 footer-quras-color-dark-btm">
                 <div class="col-md-1">
                     <div class="copyright text-sm font-weight-bold text-center text-md-left">
-                        <a href="https://o3.network/" class="font-weight-bold" target="_blank">Terms</a>
+                        <a href="#" class="font-weight-bold" target="_blank">Terms</a>
                     </div>
                 </div>
 
                 <div class="col-md-1">
                     <div class="copyright text-sm font-weight-bold text-center text-md-left">
-                        <a href="https://o3.network/" class="font-weight-bold" target="_blank">Privacy</a>
+                        <a href="#" class="font-weight-bold" target="_blank">Privacy</a>
                     </div>
                 </div>
 
                 <div class="col-md-2">
                     <div class="copyright text-sm font-weight-bold text-center text-md-left">
-                        <a href="https://o3.network/" class="font-weight-bold" target="_blank">Cookie Policy</a>
+                        <a href="#" class="font-weight-bold" target="_blank">Cookie Policy</a>
                     </div>
                 </div>
 
                 <div class="col-md-2 ml-lg-auto">
                     <div class="copyright text-sm font-weight-bold text-center text-md-left">
-                        <a href="https://o3.network/" class="font-weight-bold" target="_blank">hi@quras.io</a>
+                        <a href="#" class="font-weight-bold" target="_blank">hi@quras.io</a>
                     </div>
                 </div>
 

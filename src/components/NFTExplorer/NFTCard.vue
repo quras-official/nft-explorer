@@ -1,5 +1,4 @@
 <template>
-<router-link :to="{ name: 'details', params: { contract_hash: contract, id: token_id }}">
 <div class="card shadow">
     <div class="card shadow">
             <div class="token-card-body">
@@ -12,7 +11,6 @@
             </div>
         </div>
     </div>
-</router-link>
 </template>
 
 <script>

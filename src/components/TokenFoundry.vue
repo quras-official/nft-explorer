@@ -2,7 +2,7 @@
 
 <div id="foundry">
     <div class="row mt-7 mb-3">
-		<div class="col-10 col-md-6 mx-auto mb-5 landing-info" style="max-width:55%;flex: 0 0 55%;font-size:1.1rem;">
+		<div class="col-10 col-md-6 mx-auto mt-5 mb-5 foundary-description-tx">
 			Welcome to Quras Token Foundry! Here you can mint yourself a unique NFT on the Quras NFT contract. The goal of the Token Foundryis to give a simple way to get started with NFTs and start building concepts based around unique collectible tokens.
 		</div>
 	</div>
@@ -69,18 +69,18 @@
         </div>
     
         <div class="col-2" style="margin-right: auto">
-            <NFTCard  :token_id="100" :owner="recipient" :uri="loaded_uri" :contract="contract_hash" :attributes="attributes"></NFTCard>
+            <NFTCard  :token_id="tokenid" :owner="recipient" :uri="loaded_uri" :contract="contract_hash" :attributes="attributes"></NFTCard>
         </div>
     </div>
 
     <div class="row justify-content-center mt-6 mb-5">
         <div class="custom-control custom-checkbox">
             <input type="checkbox" class="custom-control-input" id="customCheck1">
-            <label class="custom-control-label" for="customCheck1">I agree to the <a href="https://www.o3.network" style="font-weight:bold; font-size:1.2rem">terms and conditions</a></label>
+            <label class="custom-control-label" for="customCheck1">I agree to the <a href="#" style="font-weight:bold; font-size:1.2rem">terms and conditions</a></label>
         </div>
     </div>
 
-    <div class="row justify-content-center mt-6 mb-10">
+    <div class="row justify-content-center mt-6 mb-5">
         <button type="button" v-on:click="mintToken" class="btn btn-primary btn-o3-primary">
             Mint Token
         </button>
@@ -97,7 +97,10 @@ import connectModal from "./connectModal.vue"
 
 
 const QurasJs = require('quras-js')
-const testRpcServer = new QurasJs.rpc.RPCClient(QurasJs.CONST.QURAS_NETWORK.TEST)
+const testRpcServer = new QurasJs.rpc.RPCClient(QurasJs.CONST.QURAS_NETWORK.MAIN)
+
+
+
 
 export default {
     components: {
@@ -107,9 +110,10 @@ export default {
     },
     data: function () {
         return {
-            "to_search_uri": "https://media.giphy.com/media/Wyt6sLEjKjaFjzybth/giphy.gif",
-            "loaded_uri": "https://media.giphy.com/media/Wyt6sLEjKjaFjzybth/giphy.gif",
-            "contract_hash": "0x7fe1d36ed60846975e70ec8b6fc0bef08b033107",
+            "to_search_uri": "https://media.giphy.com/media/eN4O2EqeW1lFqRg6dS/giphy.gif",
+            "loaded_uri": "https://media.giphy.com/media/eN4O2EqeW1lFqRg6dS/giphy.gif",
+            "contract_hash": "0xcc1321a11784192ab50a6141ff6ad267b858c862",
+            "tokenid": 100,
             "attributes": "",
             "contract_is_nft": true,
             "recipient": "", 
@@ -212,7 +216,6 @@ export default {
         },
 
         mintToken() {
-            alert(QurasJs.wallet.getScriptHashFromAddress(this.recipient))
             var params = [
                 { "type": "ByteArray",
                 "value": QurasJs.u.reverseHex(QurasJs.wallet.getScriptHashFromAddress(this.recipient)) },
@@ -234,7 +237,7 @@ export default {
                 contract_hash = contract_hash.substr(2, contract_hash.length - 2)
             }
 
-            QurasJs.api.qurasDB.invokeSmartContract(QurasJs.CONST.QURAS_NETWORK.TEST,this.privatekey,contract_hash,functionName, params, address)
+            QurasJs.api.qurasDB.invokeSmartContract(QurasJs.CONST.QURAS_NETWORK.MAIN,this.privatekey,contract_hash,functionName, params, address)
             .then((data) => {
                 console.log(data)
             })
@@ -243,13 +246,38 @@ export default {
                 self.unknownError = true
             })
         }
+    }, mounted: function () {
+        testRpcServer.invokeFunction("0xcc1321a11784192ab50a6141ff6ad267b858c862","deploys",new Array())
+            .then((data) => {
+                this.tokenid = parseInt(data.stack[0].value, 16)
+                console.log(this.token_id)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }
 }
+
+
+
 </script>
 
 <style>
- .landing-info {
-	color: #000000;
-	font-size: 13px;
-	text-align: center;
-}
+@media (max-width:767px)
+ {
+    .foundary-description-tx
+    {
+        text-align: center;
+    }
+ }
+
+ @media (min-width:768px)
+ {
+    .foundary-description-tx
+    {
+        max-width:55%;
+        flex: 0 0 55%;
+        font-size:1.1rem;
+    }
+ }
+ </style>
