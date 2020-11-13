@@ -2,13 +2,13 @@
 <div id="explorecard">
 		<div class="row mt-5-1">
 			<div class="col-md-6 col-10 mx-auto text-center banner-tx mt-banner">
-				Welcome to Quras’s Non fungible token (NFT) explorer and minter. 
+				Welcome to QURAS’s Non fungible token (NFT) explorer and minter. 
 			</div>
 		</div>
 
 		<div class="row mt-5-1">
 			<div class="col-10 col-md-6 mx-auto description-tx">
-				This POC is to help developers get started with NFT’s in the NEO Smart Economy.
+				This POC is to help developers get started with NFT’s in the QURAS Smart Economy.
 				<a href="#">Learn More</a>
 			</div>
 		</div>
@@ -16,7 +16,7 @@
 		<div class="row mt-5-1">
 			<div class="col-10 col-md-6 mx-auto" style="width:100%">
 				<div class="input-group mb-1">
-					<input class="form-control" v-model="search_value" v-bind:class= "{'is-valid': valid_input == true, 'is-invalid': valid_input == false}" placeholder="Contract or User Address" aria-label="NEO address" aria-describedby="basic-addon2">
+					<input class="form-control" v-model="search_value" v-bind:class= "{'is-valid': valid_input == true, 'is-invalid': valid_input == false}" placeholder="Contract or User Address" aria-label="QURAS address" aria-describedby="basic-addon2">
 					<div class="input-group-append">
 						<button type="button" v-on:click="searchForValue" class="btn btn-primary btn-o3-primary">
 							Search
@@ -38,7 +38,7 @@
 				</div>
 			</div>
 			<div class="row row-grid d-lg-flex" style="width:100%">
-				<div class="col-sm-6 col-lg-3 mb-lg-4" v-for="nft in tokens">
+				<div class="col-sm-6 col-lg-3 mb-lg-4" v-for="nft in tokens" :key="nft.token_id">
 					<NFTCard :token_id="nft.token_id" :owner="nft.owner" :uri="nft.uri" :contract="nft.contract"></NFTCard>
 				</div>
 			</div>
@@ -56,9 +56,9 @@
 
 		<section class="row mt-5-1 mb-10 col-10 col-md-6 mx-auto" v-if="totalSupply == undefined || totalSupply == 0"> 
 				<div class="landing-info-title-card mb-1 mx-auto">Don't know any NFT addresses or contracts? Check these out!</div>
-				<div class="landing-info-card mb-1 mx-auto">Quras Foundry <a href="#" v-on:click="navigateToFoundry">7fe1d36ed60846975e70ec8b6fc0bef08b033107</a></div>
+				<div class="landing-info-card mb-1 mx-auto">QURAS Foundry <a href="#" v-on:click="navigateToFoundry">7fe1d36ed60846975e70ec8b6fc0bef08b033107</a></div>
 				<div class="landing-info-card mb-1 mx-auto">HashPuppies, the OG NFT <a href="#" v-on:click="navigateToHashPuppy">e7b2046b2412c4c7f1531ce144a73d47c3b272fe</a></div>
-				<div class="landing-info-card mb-1 mx-auto">Or mint your own tokens in the Quras Foundry</div>   
+				<div class="landing-info-card mb-1 mx-auto">Or mint your own tokens in the QURAS Foundry</div>   
 		</section>
 		<modal ref="modal" :title="modalTitle" :description="modalDescription" :modalAction="modalAction"></modal>
 	
@@ -101,7 +101,7 @@
 
 				//modal stuff
 				modalTitle: "Connect to the test network",
-        modalDescription: "Looks like your O3 wallet is set to the mainnet. Currently only test net is available for this app. Please change to testnet in the settings menu",
+        modalDescription: "Looks like your QURAS wallet is set to the mainnet. Currently only test net is available for this app. Please change to testnet in the settings menu",
 				modalAction: function() {},
 
 				unknownError: false
@@ -155,7 +155,7 @@
 						"args": [
 							{
 								"type": 'ByteArray',
-								"value": Neon.u.reverseHex(Neon.wallet.getScriptHashFromAddress(this.address))
+								"value": QurasJs.u.reverseHex(Neon.wallet.getScriptHashFromAddress(this.address))
 							}, {
 								"type": "Integer",
 								"value": 1
@@ -201,7 +201,7 @@
 			},
 			
 			loadAllTokensForAddress() {
-				this.$emit('isWaitingForDapi')
+				/*this.$emit('isWaitingForDapi')
 
 				var self = this
 				var smartEcoRouter = new smartEco.SmartEcoRouter()
@@ -257,21 +257,24 @@
 							self.unknownError = true
 						})
 
-				}
+				}*/
 			},
-			loadTokensForContractPage() {
+			sleep(ms) {
+				return new Promise(resolve => setTimeout(resolve, ms));
+			},
+			async loadTokensForContractPage() {
 				var self = this
 				console.log("hello")
 				self.$emit('isWaitingForDapi')
-				var smartEcoRouter = new smartEco.SmartEcoRouter()
-				smartEcoRouter.start()
+
+				let sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+
 				this.tokens = []
 				var startIndex = self.current_page * self.items_per_page + 1
 				var endIndex = Math.min(self.current_page * self.items_per_page + self.items_per_page + 1, self.totalSupply + 1)
 				var AddingItemInd = startIndex
 				for (var i=startIndex; i<endIndex; i++) {
 					setTimeout(function(tokenId){
-						console.log(tokenId)
 						var param = [
 							{
 								"type": "Integer",
@@ -286,7 +289,6 @@
 									"value": tokenId
 								}
 							]
-							console.log(tokenId)
 							testRpcServer.invokeFunction(self.contract_hash,"ownerOf",param_owner)
 							.then((ownerValue) => {
 								self.$emit('isNotWaitingForDapi')
@@ -309,7 +311,8 @@
 							self.unknownError = true
 						})
 
-					}, 1000, i);
+					}, 10, i)
+					await sleep(500)
 				}
 			},
 			loadAllTokensForContract() {
@@ -320,7 +323,7 @@
 				testRpcServer.invokeFunction(this.search_value,"deploys",new Array())
 				.then((data) => {
 					self.totalSupply = parseInt(data.stack[0].value, 16)
-					
+					console.log(self.totalSupply);
 					self.total_pages = Math.ceil(self.totalSupply / self.items_per_page)
 					self.loadTokensForContractPage()
 				})

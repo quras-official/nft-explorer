@@ -32,7 +32,7 @@
                 <div class="col-10">
                     <h6>Upload a gif from <a target="_blank" href="https://giphy.com/" >Giphy</a></h6>
                     <div class="input-group mb-3">
-                        <input v-model="to_search_uri" v-bind:class= "{'is-invalid': uri_is_valid === false}" placeholder="URI for image" aria-label="NEO address" aria-describedby="basic-addon2" class="form-control">
+                        <input v-model="to_search_uri" v-bind:class= "{'is-invalid': uri_is_valid === false}" placeholder="URI for image" aria-label="QURAS address" aria-describedby="basic-addon2" class="form-control">
                         <div class="input-group-append">
                             <button type="button" v-on:click="displayURI" class="btn btn-primary btn-o3-primary">
                                 Upload
@@ -49,13 +49,26 @@
                 <div class="col-10">
                     <h6>Select The Recipient Address</h6>
                     <div class="input-group mb-3">
-                        <input v-model="recipient" v-bind:class= "{'is-invalid': address_is_valid === false}" placeholder="Recipient Address" aria-label="NEO address" aria-describedby="basic-addon2" class="form-control">
+                        <input v-model="recipient" v-bind:class= "{'is-invalid': address_is_valid === false}" placeholder="Recipient Address" aria-label="QURAS address" aria-describedby="basic-addon2" class="form-control">
                         <div class="invalid-feedback">
                             Please provide a address
                         </div>
                     </div>
                 </div>
             </div>
+
+            <div class="row mt-5 pb-3">
+                <div class="col-10">
+                    <h6>Enter a Mint Fee</h6>
+                    <div class="input-group mb-3">
+                        <input v-model="fee" v-bind:class= "{'is-invalid': fee_is_valid === false}" placeholder="Fee" aria-label="QURAS address" aria-describedby="basic-addon2" class="form-control">
+                        <div class="invalid-feedback">
+                            Please input a correct number
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="row mt-3">
                 <div class="col-10">
                     <h6>Enter Your PrivateKey</h6>
@@ -112,7 +125,7 @@ export default {
         return {
             "to_search_uri": "https://media.giphy.com/media/eN4O2EqeW1lFqRg6dS/giphy.gif",
             "loaded_uri": "https://media.giphy.com/media/eN4O2EqeW1lFqRg6dS/giphy.gif",
-            "contract_hash": "0xcc1321a11784192ab50a6141ff6ad267b858c862",
+            "contract_hash": "0xac1bffebadc28a736d448094654829f8ca36f67f",
             "tokenid": 100,
             "attributes": "",
             "contract_is_nft": true,
@@ -120,10 +133,12 @@ export default {
             "show-modal": false,
             "minted": false,
             "privatekey": "",
+            "fee":0.001,
 
             "address_is_valid": undefined,
             "uri_is_valid": undefined,
             "attributes_is_valid": undefined,
+            "fee_is_valid": undefined,
 
             //modal after
             "modalTitle": "",
@@ -133,9 +148,9 @@ export default {
     }, 
     methods:{
         convertHexToString(hex) {
-    			var str = '';
-    			for (var i = 0; (i < hex.length && hex.substr(i, 2) !== '00'); i += 2)
-        			str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+				var str = '';
+				for (var i = 0; (i < hex.length && hex.substr(i, 2) !== '00'); i += 2)
+					str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
                 return str;
                 },
         displayURI() {
@@ -147,18 +162,18 @@ export default {
                 "args": []  ,
                 "network": "TestNet"
             }
-            console.log(supportedStandardsRequest)
+            //console.log(supportedStandardsRequest)
             return supportedStandardsRequest
         },
         buildMintTokensRequest() {
-            var time = new Date()
+            //var time = new Date()
             var mintTokensRequest = { "scriptHash": this.contract_hash,
                 "operation": "mintToken",
                 "args": [
-                    {"type": "ByteArray", "value": Neon.u.reverseHex(Neon.wallet.getScriptHashFromAddress(this.recipient))},
+                    {"type": "ByteArray", "value": QurasJs.u.reverseHex(QurasJs.wallet.getScriptHashFromAddress(this.recipient))},
                     {"type": "ByteArray", "value": "4f3320526f636b73"},
-                    {"type": "ByteArray", "value": Neon.u.str2hexstring(this.loaded_uri)},
-                    {"type": "ByteArray", "value": Neon.u.str2hexstring(this.attributes)},
+                    {"type": "ByteArray", "value": QurasJs.u.str2hexstring(this.loaded_uri)},
+                    {"type": "ByteArray", "value": QurasJs.u.str2hexstring(this.attributes)},
                 ],
                 "network": "TestNet",
                 "fee": "0"
@@ -166,7 +181,7 @@ export default {
             return mintTokensRequest
         },
         validateContract() {
-            console.log("attempting contract validation")
+            //console.log("attempting contract validation")
             var self = this
             if (this.contract_hash.length != 42) {
                 self.contract_is_nft = false
@@ -181,8 +196,8 @@ export default {
                         self.contract_is_nft = true
                     }
                 })
-                .catch(function(e) {
-                    console.log(e) 
+                .catch(function() {
+                    //console.log(e) 
                     self.contract_is_nft = false
                 })                        
             }
@@ -195,27 +210,34 @@ export default {
                 return false;
             }
         },
+        isValidNumber(n) {
+            return !isNaN(parseFloat(n)) && isFinite(n);
+        },
         validateFields() {
             this.uri_is_valid = true
             this.address_is_valid = true
             this.attributes_is_valid = true
+            this.fee_is_valid = true;
             this.loaded_uri = this.to_search_uri
             //make sure url is a valid image, and if using O3 contract to only allow it via giphy
             if (this.loaded_uri.match(/\.(jpeg|jpg|gif|png)$/) == null || (this.contract_hash == "7fe1d36ed60846975e70ec8b6fc0bef08b033107" && this.loaded_uri.startsWith("https://media.giphy.com") == false)) {
                 this.uri_is_valid = false
                 return false
-            } else if (Neon.wallet.isAddress(this.recipient) == false) {
+            } else if (QurasJs.wallet.isAddress(this.recipient) == false) {
                 this.address_is_valid = false
                 return false
-            } else if (this.isJsonString(this.attributes) == false) {
-                console.log(this.attributes)
-                this.attributes_is_valid = false
-                return false    
+            } else if (this.isValidNumber(this.fee) == false) {
+                console.log(this.fee)
+                this.fee_is_valid = false
+                return false
             }
+            
             return true
         },
 
         mintToken() {
+            if (this.validateFields() == false) return
+
             var params = [
                 { "type": "ByteArray",
                 "value": QurasJs.u.reverseHex(QurasJs.wallet.getScriptHashFromAddress(this.recipient)) },
@@ -237,7 +259,7 @@ export default {
                 contract_hash = contract_hash.substr(2, contract_hash.length - 2)
             }
 
-            QurasJs.api.qurasDB.invokeSmartContract(QurasJs.CONST.QURAS_NETWORK.MAIN,this.privatekey,contract_hash,functionName, params, address)
+            QurasJs.api.qurasDB.invokeSmartContract(QurasJs.CONST.QURAS_NETWORK.MAIN,this.privatekey,contract_hash,functionName, params, address, parseFloat(this.fee))
             .then((data) => {
                 console.log(data)
             })
@@ -247,13 +269,13 @@ export default {
             })
         }
     }, mounted: function () {
-        testRpcServer.invokeFunction("0xcc1321a11784192ab50a6141ff6ad267b858c862","deploys",new Array())
+        testRpcServer.invokeFunction("0xac1bffebadc28a736d448094654829f8ca36f67f","deploys",new Array())
             .then((data) => {
                 this.tokenid = parseInt(data.stack[0].value, 16)
-                console.log(this.token_id)
+                //console.log(this.token_id)
             })
-            .catch((error) => {
-                console.log(error)
+            .catch(() => {
+                //console.log(error)
             })
     }
 }

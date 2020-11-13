@@ -12,7 +12,7 @@
                     </div>
                 </div>
                 <div class="d-flex padding-top-30">
-                    <a href="https://neodapitestbed.o3.app/" target="_blank" class="btn btn-primary btn-o3-primary">Check out the dAPI Today!</a>
+                    <a href="https://docs.quras.io/en/docs-overview.html" target="_blank" class="btn btn-primary btn-o3-primary">Check out the dAPI Today!</a>
                     </div>
                 </div>
             </div>

@@ -88,7 +88,7 @@
 
 			<div class="row mt-5">
 				<div class="" style="font-size:18px;">
-					This POC is to help developers get started with NFT’s in the NEO Smart Economy.
+					This POC is to help developers get started with NFT’s in the QURAS Smart Economy.
 					<a href="#">Learn More</a>
 				</div>
 			</div>
@@ -96,7 +96,7 @@
 			<div class="row mt-5">
 				<div style="width:100%">
 					<div class="input-group mb-1">
-						<input class="form-control" v-model="search_value" v-bind:class= "{'is-valid': valid_input == true, 'is-invalid': valid_input == false}" placeholder="Contract or User Address" aria-label="NEO address" aria-describedby="basic-addon2">
+						<input class="form-control" v-model="search_value" v-bind:class= "{'is-valid': valid_input == true, 'is-invalid': valid_input == false}" placeholder="Contract or User Address" aria-label="QURAS address" aria-describedby="basic-addon2">
 						<div class="input-group-append">
 							<button type="button" v-on:click="searchForValue" class="btn btn-primary btn-o3-primary">
 								Search
@@ -115,7 +115,7 @@
 			<section class="row mt-5 mb-10" v-if="totalSupply == undefined || totalSupply == 0"> 
 				<div style="width:100%">
 					<div class="landing-info-title mb-1">Don't know any NFT addresses or contracts? Check these out!</div>
-					<div class="landing-info mb-1">Quras Foundry <a href="#" v-on:click="navigateToFoundry">0xcc1321a11784192ab50a6141ff6ad267b858c862</a></div>
+					<div class="landing-info mb-1">Quras Foundry <a href="#" v-on:click="navigateToFoundry">0xac1bffebadc28a736d448094654829f8ca36f67f</a></div>
 					<div class="landing-info mb-1">Or mint your own tokens in the Quras Foundry</div>
 				</div>   
 			</section>
@@ -167,12 +167,12 @@
 				window.location.href = "/#/explorecard?search_value=" + this.search_value;
 			},
 			navigateToFoundry() {
-				this.search_value = "0xcc1321a11784192ab50a6141ff6ad267b858c862"
+				this.search_value = "0xac1bffebadc28a736d448094654829f8ca36f67f"
 				this.searchForValue()
 			},
 
 			navigateToHashPuppy() {
-				this.search_value = "e7b2046b2412c4c7f1531ce144a73d47c3b272fe"
+				this.search_value = "0xac1bffebadc28a736d448094654829f8ca36f67f"
 				this.searchForValue()
 			},
 		}, mounted: function () {
