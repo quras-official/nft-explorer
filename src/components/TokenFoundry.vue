@@ -133,12 +133,16 @@ export default {
             "show-modal": false,
             "minted": false,
             "privatekey": "",
-            "fee":0.001,
+            "fee":1200,
 
             "address_is_valid": undefined,
             "uri_is_valid": undefined,
             "attributes_is_valid": undefined,
             "fee_is_valid": undefined,
+
+            "is_success": undefined,
+            "success_note_message": undefined,
+            "errorClass": "success-message",
 
             //modal after
             "modalTitle": "",
@@ -227,7 +231,6 @@ export default {
                 this.address_is_valid = false
                 return false
             } else if (this.isValidNumber(this.fee) == false) {
-                console.log(this.fee)
                 this.fee_is_valid = false
                 return false
             }
@@ -236,37 +239,69 @@ export default {
         },
 
         mintToken() {
+            var self = this
             if (this.validateFields() == false) return
+            self.$emit('isWaitingForDapi')
+            try
+            {
+                var params = [
+                    { "type": "ByteArray",
+                    "value": QurasJs.u.reverseHex(QurasJs.wallet.getScriptHashFromAddress(this.recipient)) },
+                    { "type": "String",
+                    "value": this.to_search_uri }
+                ]
 
-            var params = [
-                { "type": "ByteArray",
-                "value": QurasJs.u.reverseHex(QurasJs.wallet.getScriptHashFromAddress(this.recipient)) },
-                { "type": "String",
-                "value": this.to_search_uri }
-            ]
+                var functionName = {
+                    "type": "String",
+                    "value": "mint"
+                }
 
-            var functionName = {
-                "type": "String",
-                "value": "mint"
+                var pubKey = QurasJs.wallet.getPublicKeyFromPrivateKey(this.privatekey)
+                var scriptHash = QurasJs.wallet.getScriptHashFromPublicKey(pubKey)
+                var address = QurasJs.wallet.getAddressFromScriptHash(scriptHash)
+                
+                var contract_hash = this.contract_hash
+                if (contract_hash.substr(0, 2) === '0x') {
+                    contract_hash = contract_hash.substr(2, contract_hash.length - 2)
+                }
+
+                QurasJs.api.qurasDB.invokeSmartContract(QurasJs.CONST.QURAS_NETWORK.MAIN,this.privatekey,contract_hash,functionName, params, address, parseFloat(this.fee))
+                .then((data) => {
+                    self.$emit('isNotWaitingForDapi')
+                    console.log(data["status"])
+                    self.is_success = data["status"]
+                    if (self.is_success == false)
+                    {
+                        self.modalTitle = "Mint Failed"
+                        self.modalDescription = "Something went wrong, double check your information and try again in a a couple of minutes"
+                        self.modalAction = function() {}
+                        let element = self.$refs.modal.$el
+                        $(element).modal('show')
+                    }
+                    else
+                    {
+                        self.minted = true
+                        self.modalTitle = "Mint Succeeded"
+                        self.modalDescription = "You're token has succeeded in minting, it should show up in the explorer in a couple of minutes"
+                        self.modalAction = function() {
+                            console.log("replacing route")
+                            self.$router.replace({ name: 'explorer'})
+                        }
+                        let element = self.$refs.modal.$el
+                        $(element).modal('show')
+                    }
+                })
+                .catch((error) => {
+                    self.$emit('isNotWaitingForDapi')
+                    console.log(error)
+                    self.unknownError = true
+                })
             }
-
-            var pubKey = QurasJs.wallet.getPublicKeyFromPrivateKey(this.privatekey)
-            var scriptHash = QurasJs.wallet.getScriptHashFromPublicKey(pubKey)
-            var address = QurasJs.wallet.getAddressFromScriptHash(scriptHash)
-            
-            var contract_hash = this.contract_hash
-            if (contract_hash.substr(0, 2) === '0x') {
-                contract_hash = contract_hash.substr(2, contract_hash.length - 2)
-            }
-
-            QurasJs.api.qurasDB.invokeSmartContract(QurasJs.CONST.QURAS_NETWORK.MAIN,this.privatekey,contract_hash,functionName, params, address, parseFloat(this.fee))
-            .then((data) => {
-                console.log(data)
-            })
-            .catch((error) => {
+            catch(error) {
+                self.$emit('isNotWaitingForDapi')
                 console.log(error)
                 self.unknownError = true
-            })
+            }
         }
     }, mounted: function () {
         testRpcServer.invokeFunction("0xac1bffebadc28a736d448094654829f8ca36f67f","deploys",new Array())
@@ -291,6 +326,19 @@ export default {
     {
         text-align: center;
     }
+    .success-message {
+		color: #7ED321;
+		font-size: 13px;
+		font-weight: bold;
+		text-align: center;
+	}
+
+    .danger-message {
+		color: #EECD54;
+		font-size: 13px;
+		font-weight: bold;
+		text-align: center;
+	}
  }
 
  @media (min-width:768px)
@@ -301,5 +349,17 @@ export default {
         flex: 0 0 55%;
         font-size:1.1rem;
     }
+
+    .success-message {
+		color: #7ED321;
+		font-size: 18px;
+		font-weight: bold;
+	}
+
+    .danger-message {
+		color: #EECD54;
+		font-size: 18px;
+		font-weight: bold;
+	}
  }
  </style>

@@ -95,13 +95,14 @@
 													"0df71b4a31a35b4dc86eeb8d062bc9d8d6235929"
 													],
 				tokens:[],
+				temp_tokens:[],
 				current_page: 0,
 				items_per_page: 8,
 				total_pages: 0,
 
 				//modal stuff
 				modalTitle: "Connect to the test network",
-        modalDescription: "Looks like your QURAS wallet is set to the mainnet. Currently only test net is available for this app. Please change to testnet in the settings menu",
+        		modalDescription: "Looks like your QURAS wallet is set to the mainnet. Currently only test net is available for this app. Please change to testnet in the settings menu",
 				modalAction: function() {},
 
 				unknownError: false
@@ -270,9 +271,11 @@
 				let sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 				this.tokens = []
+				this.temp_tokens = []
 				var startIndex = self.current_page * self.items_per_page + 1
 				var endIndex = Math.min(self.current_page * self.items_per_page + self.items_per_page + 1, self.totalSupply + 1)
 				var AddingItemInd = startIndex
+				
 				for (var i=startIndex; i<endIndex; i++) {
 					setTimeout(function(tokenId){
 						var param = [
@@ -294,7 +297,7 @@
 								self.$emit('isNotWaitingForDapi')
 								var uri = self.convertHexToString(uriValue["stack"][0]["value"])
 								var owner = self.convertHexToString(ownerValue["stack"][0]["value"])
-								self.tokens.push ({
+								self.temp_tokens.push ({
 									"token_id": tokenId,
 									"uri": uri,
 									"owner": QurasJs.wallet.getAddressFromScriptHash(QurasJs.u.reverseHex(ownerValue["stack"][0]["value"])),
@@ -312,7 +315,24 @@
 						})
 
 					}, 10, i)
-					await sleep(500)
+				}
+				while (this.temp_tokens.length < endIndex - startIndex){
+					await sleep(100)
+				}
+				console.log(this.temp_tokens)
+				for (var i=0; i<endIndex - startIndex; i++) {
+					for (var j=0; j<endIndex - startIndex; j++) {
+						if (i == this.temp_tokens[j]["token_id"] - startIndex)
+						{
+							this.tokens.push ({
+								"token_id": i + startIndex,
+								"uri": this.temp_tokens[j]["uri"],
+								"owner": this.temp_tokens[j]["owner"],
+								"contract": self.contract_hash
+							})
+							break;
+						}
+					}
 				}
 			},
 			loadAllTokensForContract() {
