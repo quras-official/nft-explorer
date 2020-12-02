@@ -32,37 +32,37 @@
                         <p class="footer-quras-twitt-logo ">We are here!</p>
                         <div class="row">
                             <div class="col">
-                                <a href="\" class="footer-quras-logo-btn">
+                                <a href="https://t.me/QurasOfficialGroup" class="footer-quras-logo-btn">
                                     <img src="<%= BASE_URL %>../../link_0.png" class="footer-quras-logo-btn-img" style="height: 15px;">
                                 </a>
                             </div>
                             <div class="col">
-                            <a href="\" class="footer-quras-logo-btn">
+                            <a href="https://twitter.com/qurasofficial" class="footer-quras-logo-btn">
                                 <img src="<%= BASE_URL %>../../link_1.png" class="footer-quras-logo-btn-img" style="height: 15px;">
                             </a>
                             </div>
                             <div class="col">
-                            <a href="\" class="footer-quras-logo-btn">
+                            <a href="https://www.facebook.com/qurasofficial" class="footer-quras-logo-btn">
                                 <img src="<%= BASE_URL %>../../link_2.png" class="footer-quras-logo-btn-img" style="height: 15px;">
                             </a>
                             </div>
                             <div class="col">
-                            <a href="\" class="footer-quras-logo-btn">
+                            <a href="https://medium.com/@qurasofficial" class="footer-quras-logo-btn">
                                 <img src="<%= BASE_URL %>../../link_3.png" class="footer-quras-logo-btn-img" style="height: 15px;">
                             </a>
                             </div>
                             <div class="col">
-                            <a href="\" class="footer-quras-logo-btn">
+                            <a href="https://www.linkedin.com/company/quras/" class="footer-quras-logo-btn">
                                 <img src="<%= BASE_URL %>../../link_4.png" class="footer-quras-logo-btn-img" style="height: 15px;">
                             </a>
                             </div>
                             <div class="col">
-                            <a href="\" class="footer-quras-logo-btn">
+                            <a href="https://vimeo.com/user84125561" class="footer-quras-logo-btn">
                                 <img src="<%= BASE_URL %>../../link_5.png" class="footer-quras-logo-btn-img" style="height: 15px;">
                             </a>
                             </div>
                             <div class="col">
-                            <a href="\" class="footer-quras-logo-btn">
+                            <a href="https://github.com/quras-official" class="footer-quras-logo-btn">
                                 <img src="<%= BASE_URL %>../../link_6.png" class="footer-quras-logo-btn-img" style="height: 15px;">
                             </a>
                             </div>
@@ -71,11 +71,11 @@
                     <div class="col-lg-3 col-6 col-sm-4 ml-lg-auto mb-5 mb-lg-0">
                         <h6 class="heading mb-3">Community</h6>
                         <ul class="list-unstyled">
-                            <li><a href="#">Quras Telegram Group</a>
+                            <li><a href="https://t.me/QurasOfficialGroup">Quras Telegram Group</a>
                             </li>
-                            <li><a href="#">Face</a>
+                            <li><a href="https://www.facebook.com/QurasOfficial/">Facebook</a>
                             </li>
-                            <li><a href="#">Twitter</a>
+                            <li><a href="https://twitter.com/qurasofficial">Twitter</a>
                             </li>
                         </ul>
                         
@@ -84,13 +84,13 @@
                     <div class="col-lg-3 col-sm-4 mb-5 mb-lg-0">
                         <h6 class="heading mb-3">Quras</h6>
                         <ul class="list-unstyled">
-                            <li><a href="#">IOS</a>
+                            <li><a href="https://apps.apple.com/my/app/quras-wallet-1-0/id1520371057">IOS</a>
                             </li>
-                            <li><a href="#">Android</a>
+                            <li><a href="https://play.google.com/store/apps/details?id=io.quras.wallet">Android</a>
                             </li>
-                            <li><a href="#">macOS</a>
+                            <li><a href="https://api.quraswallet.org/downloadMacWallet">macOS</a>
                             </li>
-                            <li><a href="#">Windows</a>
+                            <li><a href="https://blockapi.quras.io/update/release/Quras-Wallet(v5.0.4.0).zip">Windows</a>
                             </li>
                         </ul>
                     </div>
@@ -98,11 +98,9 @@
                     <div class="col-lg-2 col-sm-4 mb-5 mb-lg-0">
                         <h6 class="heading mb-3">Company</h6>
                         <ul class="list-unstyled">
-                            <li><a href="#">Home</a>
+                            <li><a href="https://quras.io">Home</a>
                             </li>
-                            <li><a href="#">Team</a>
-                            </li>
-                            <li><a href="#">Support</a>
+                            <li><a href="https://quras.io/en/faq">FAQ</a>
                             </li>
                         </ul>
                     </div>
@@ -112,25 +110,19 @@
             <div class="row align-items-center justify-content-md-between py-4 mt-4 footer-quras-color-dark-btm">
                 <div class="col-md-1">
                     <div class="copyright text-sm font-weight-bold text-center text-md-left">
-                        <a href="#" class="font-weight-bold" target="_blank">Terms</a>
+                        <a href="https://quras.io/en/terms-of-service" class="font-weight-bold" target="_blank">Terms</a>
                     </div>
                 </div>
 
                 <div class="col-md-1">
                     <div class="copyright text-sm font-weight-bold text-center text-md-left">
-                        <a href="#" class="font-weight-bold" target="_blank">Privacy</a>
-                    </div>
-                </div>
-
-                <div class="col-md-2">
-                    <div class="copyright text-sm font-weight-bold text-center text-md-left">
-                        <a href="#" class="font-weight-bold" target="_blank">Cookie Policy</a>
+                        <a href="https://quras.io/en/privacy-policy" class="font-weight-bold" target="_blank">Privacy</a>
                     </div>
                 </div>
 
                 <div class="col-md-2 ml-lg-auto">
                     <div class="copyright text-sm font-weight-bold text-center text-md-left">
-                        <a href="#" class="font-weight-bold" target="_blank">hi@quras.io</a>
+                        <a class="font-weight-bold" target="_blank">tech@quras.io</a>
                     </div>
                 </div>
 
